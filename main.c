@@ -23,8 +23,9 @@ int main(int argc, char *argv[]) {
 	//clr;
 	}
 	
-	int selector=0;
-	printf("¿Que operacion desea realizar sobre la base de datos?\n");
+	int selector=1;
+	do {
+	printf("Que operacion desea realizar sobre la base de datos?\n");
 	printf("1=> Ubicaciones segun el proyecto\n");
 	printf("2=> Total de horas trabajadas de cada departamento\n");
 	scanf("%d",&selector);
@@ -38,8 +39,10 @@ int main(int argc, char *argv[]) {
 		sele2(db);
 	}else{
 		printf("Entrada no valida\n");
+		system("Pause");
+		clr;
 	}
-    
+} while(!(selector==1 || selector==2));
 	
     sqlite3_close(db);
 }

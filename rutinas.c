@@ -4,25 +4,27 @@
 #include <string.h>
 #define clr system("cls");
 
+
+//funcion de apertura de la base de datos
 void opn(sqlite3 **b, char _fname[], int *_res){
 	
 	 *_res = sqlite3_open_v2(_fname, b, SQLITE_OPEN_READWRITE,NULL);
-	 printf("%d\n",*_res);
+	 //printf("%d\n",*_res);
     if (*_res)
     {
-        fprintf(stderr,"La base de datos no existe %s\n", sqlite3_errmsg(*b));
+        fprintf(stderr,"La base de datos no existe ==> %s\n", sqlite3_errmsg(*b));
         system("pause");
         clr;
         //exit(0);
     }
     else
     {
-        fprintf(stderr, "Base de datos OK\n");
+        fprintf(stderr, "Base de datos OK\n\n");
     }
 }
 
 
-
+//funcion callback de SQL
 static int selectCb(char _outM[50][10][200], int argc, char **argv, char **colNames)
 {
     static int i=0;//iteradores del array
@@ -40,7 +42,7 @@ static int selectCb(char _outM[50][10][200], int argc, char **argv, char **colNa
 
 
 
-
+//funcion lectura base de datos
 void readDB(sqlite3 *b, char _outM[50][10][200],char *_sql){
 	char *error = 0;
 	//char *sql;//comando sql
@@ -52,27 +54,28 @@ void readDB(sqlite3 *b, char _outM[50][10][200],char *_sql){
 
 	if (res != SQLITE_OK)
     {
-        fprintf(stderr, "Error: %s\n", error);
+        fprintf(stderr, "Error: %s\n\n", error);
 		sqlite3_free(error);
     }
     else
     {
-        fprintf(stdout, "SELECT Ok!\n");
+        fprintf(stdout, "Consulta realizada con exito \n\n");
     }
 }
 
-
-	void sele1(sqlite3 *bd){
+//funcion comando SQL 1
+void sele1(sqlite3 *bd){
 	
 		char *sql="SELECT Nombre_Pila, Apellido_1, Proy_Ubicacion, Proy_Numero FROM Empleado, Proyecto WHERE Empleado.Numero_Dpto=Proyecto.Numero_Dpto;";
 		int s=0;
     	char outM[50][10][200]={};//esto puede almacenar 10 campos, 50 registros, de 200 caracteres cada uno (implementar memoria dinamica luego?)
     	readDB(bd, outM,sql);
-    	
-		printf("¿Que desea hacer con la informacion extraida?\n");
+    	do {
+		printf("Que desea hacer con la informacion extraida?\n");
     	printf("1=> Mostrar por pantalla\n");
 		printf("2=> Escribir en un fichero\n");
 		scanf("%d",&s);
+		clr;
 		
 		if(s==1){
 		 
@@ -111,27 +114,35 @@ void readDB(sqlite3 *b, char _outM[50][10][200],char *_sql){
 			fprintf(fp,"%s\t",outM[i][1]);
 			fprintf(fp,"%s \t",outM[i][2]);
 			fprintf(fp,"%s\n",outM[i][3]);
+			i++;
 		}
 		fclose(fp);
+		printf("Escritura correcta\n");
 		
 		
 		}else{
 		printf("Entrada no valida\n");
-		}		
+		system("Pause");
+		clr;
+		}	
+	} while(!(s==1 || s==2));
 		
 	}
 	
-	void sele2(sqlite3 *bd){
+
+//funcion comando SQL 2
+void sele2(sqlite3 *bd){
 		
 		char *sql="SELECT Nombre_Dpto, sum(Horas) FROM (SELECT Nombre_Dpto, Numero_Dpto, Horas FROM Empleado, Trabaja_En, Departamento WHERE Trabaja_En.ID_Empleado=Empleado.ID_Empleado AND Empleado.Numero_Dpto=Departamento.Num_Dpto) GROUP By Numero_Dpto;";
 		int s=0;
     	char outM[50][10][200]={};//esto puede almacenar 10 campos, 50 registros, de 200 caracteres cada uno (implementar memoria dinamica luego?)
     	readDB(bd, outM,sql);
-    	
-		printf("¿Que desea hacer con la informacion extraida?\n");
+    	do{
+		printf("Que desea hacer con la informacion extraida?\n");
     	printf("1=> Mostrar por pantalla\n");
 		printf("2=> Escribir en un fichero\n");
 		scanf("%d",&s);
+		clr;
 		
 		if(s==1){
 		 
@@ -165,11 +176,15 @@ void readDB(sqlite3 *b, char _outM[50][10][200],char *_sql){
 			i++;
 		}
 		fclose(fp);
+		printf("Escritura correcta\n");
 		
 		
 		}else{
 		printf("Entrada no valida\n");
+		system("Pause");
+		clr;
+		}	
+	} while(!(s==1 || s==2));
 		}
 		
-	}
 
