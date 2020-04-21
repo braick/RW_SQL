@@ -90,7 +90,7 @@ void sele1(sqlite3 *bd){
 			printf("%s",outM[i][0]);
 			printf(",");
 			printf("%s\t",outM[i][1]);
-			printf("%s\t",outM[i][2]);
+			printf("%s    \t",outM[i][2]);
 			printf("%s\n",outM[i][3]);
 			i++;
 		}
@@ -112,7 +112,7 @@ void sele1(sqlite3 *bd){
 			fprintf(fp,"%s",outM[i][0]);
 			fprintf(fp,",");
 			fprintf(fp,"%s\t",outM[i][1]);
-			fprintf(fp,"%s \t",outM[i][2]);
+			fprintf(fp,"%s    \t",outM[i][2]);
 			fprintf(fp,"%s\n",outM[i][3]);
 			i++;
 		}
