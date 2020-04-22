@@ -45,4 +45,5 @@ int main(int argc, char *argv[]) {
 } while(!(selector==1 || selector==2));
 	
     sqlite3_close(db);
+    system("pause");
 }
