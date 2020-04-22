@@ -32,11 +32,11 @@ int main(int argc, char *argv[]) {
 	clr;
 	
 	if(selector==1){
-		sele1(db);  //NO PUEDO METERLO EN OTRA FUNCION
+		sele1(db);//llama funcion selccion 1
 
 	}
 	else if(selector==2){
-		sele2(db);
+		sele2(db);//llama funcion seleccion 2
 	}else{
 		printf("Entrada no valida\n");
 		system("Pause");

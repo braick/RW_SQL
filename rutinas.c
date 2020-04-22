@@ -8,7 +8,7 @@
 //funcion de apertura de la base de datos
 void opn(sqlite3 **b, char _fname[], int *_res){
 	
-	 *_res = sqlite3_open_v2(_fname, b, SQLITE_OPEN_READWRITE,NULL);
+	 *_res = sqlite3_open_v2(_fname, b, SQLITE_OPEN_READWRITE,NULL);//abre base de datos solo si existe en el directorio. NO creo una si no
 	 //printf("%d\n",*_res);
     if (*_res)
     {
@@ -31,7 +31,7 @@ static int selectCb(char _outM[50][10][200], int argc, char **argv, char **colNa
     int n=0;
     
 	for(n=0; n<argc; n++){
-    	
+    	//volcado de cada dato al array
 		strcpy(_outM[i][n],argv[n]);
    	
 	}
@@ -48,10 +48,9 @@ void readDB(sqlite3 *b, char _outM[50][10][200],char *_sql){
 	//char *sql;//comando sql
 	int res;
 	int *r;
-	//sql = "SELECT Nombre_Pila, Apellido_1, Nombre_Dpto, Proy_Numero FROM Empleado, Departamento, Proyecto WHERE Empleado.Numero_Dpto=Departamento.Num_Dpto AND Empleado.Numero_Dpto=Proyecto.Numero_Dpto;";
-	//sql = "SELECT Nombre_Pila, Apellido_1, Proy_Ubicacion, Proy_Numero FROM Empleado, Proyecto WHERE Empleado.Numero_Dpto=Proyecto.Numero_Dpto;";
+	//llamada a la funcion callback
 	res = sqlite3_exec(b, _sql, selectCb, _outM, &error);
-
+	//chaqueo de errores
 	if (res != SQLITE_OK)
     {
         fprintf(stderr, "Error: %s\n\n", error);
@@ -65,12 +64,16 @@ void readDB(sqlite3 *b, char _outM[50][10][200],char *_sql){
 
 //funcion comando SQL 1
 void sele1(sqlite3 *bd){
-	
+		//comando SQL consulta 1
 		char *sql="SELECT Nombre_Pila, Apellido_1, Proy_Ubicacion, Proy_Numero FROM Empleado, Proyecto WHERE Empleado.Numero_Dpto=Proyecto.Numero_Dpto;";
+		
+		
 		int s=0;
-    	char outM[50][10][200]={};//esto puede almacenar 10 campos, 50 registros, de 200 caracteres cada uno (implementar memoria dinamica luego?)
-    	readDB(bd, outM,sql);
-    	do {
+    	char outM[50][10][200]={};//este array puede almacenar 10 campos, 50 registros, de 200 caracteres cada uno
+    	readDB(bd, outM,sql);//llamada a funcion de lectura
+    	
+		//menus
+		do {
 		printf("Que desea hacer con la informacion extraida?\n");
     	printf("1=> Mostrar por pantalla\n");
 		printf("2=> Escribir en un fichero\n");
@@ -78,7 +81,7 @@ void sele1(sqlite3 *bd){
 		clr;
 		
 		if(s==1){
-		 
+		  //impresion por pantalla
 		printf("El empleado:\t");
 		printf("Trabaja en:\t");
 		printf("Asociado al Proy No:\n");
@@ -97,6 +100,7 @@ void sele1(sqlite3 *bd){
 		
 		}else if(s==2){
 			
+			//volcado en un archivo
 			FILE *fp;
 			fp=fopen("Salida_BD.txt","w+");
 			
@@ -133,11 +137,15 @@ void sele1(sqlite3 *bd){
 //funcion comando SQL 2
 void sele2(sqlite3 *bd){
 		
+		//comando SQL 2
 		char *sql="SELECT Nombre_Dpto, sum(Horas) FROM (SELECT Nombre_Dpto, Numero_Dpto, Horas FROM Empleado, Trabaja_En, Departamento WHERE Trabaja_En.ID_Empleado=Empleado.ID_Empleado AND Empleado.Numero_Dpto=Departamento.Num_Dpto) GROUP By Numero_Dpto;";
+		
 		int s=0;
     	char outM[50][10][200]={};//esto puede almacenar 10 campos, 50 registros, de 200 caracteres cada uno (implementar memoria dinamica luego?)
-    	readDB(bd, outM,sql);
-    	do{
+    	
+		readDB(bd, outM,sql);
+    	
+		do{
 		printf("Que desea hacer con la informacion extraida?\n");
     	printf("1=> Mostrar por pantalla\n");
 		printf("2=> Escribir en un fichero\n");
@@ -145,7 +153,7 @@ void sele2(sqlite3 *bd){
 		clr;
 		
 		if(s==1){
-		 
+		
 		printf("El Departartamento:\t");
 		printf("Tiene un total de horas:\n");
 		
